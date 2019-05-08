@@ -174,7 +174,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 							col.html().replace("&amp;", "&"));
 				} else {
 					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100,
-							"Test");
+							col.html().replace("&amp;", "&").replace("e", "Z"));
 				}
 			}
 			yStart -= row.getHeight();
