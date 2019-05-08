@@ -173,8 +173,13 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 							tableWidth / columnsSize * Integer.parseInt(col.attr("colspan")) / row.getWidth() * 100,
 							col.html().replace("&amp;", "&"));
 				} else {
-					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100,
-							col.html().replace("&amp;", "&").replace("e", "Z"));
+					if(col.html().startsWith("<table>")) {
+						Cell<T> cell = (Cell<T>) row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, col.html().replace("&amp;", "&"), doc, currentPage, columnsSize, tableWidth, columnsSize);
+					} else {
+						Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100,
+								col.html().replace("&amp;", "&"));
+					}
+					
 				}
 			}
 			yStart -= row.getHeight();
