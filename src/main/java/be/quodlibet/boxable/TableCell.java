@@ -365,51 +365,51 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 			float tableWidth = this.width - getLeftPadding() - getRightPadding();
 			tableCellContentStream = new PDPageContentStream(doc, page, true, true);
 			// check if there is some additional text outside inner table
-			String[] outerTableText = tableData.split("<table");
-			// don't forget to attach splited tag
-			for (int i = 1; i < outerTableText.length; i++) {
-				outerTableText[i] = "<table " + outerTableText[i];
-			}
-			Paragraph outerTextParagraph = null;
-			String caption = "";
+//			String[] outerTableText = tableData.split("<table");
+//			// don't forget to attach splited tag
+//			for (int i = 1; i < outerTableText.length; i++) {
+//				outerTableText[i] = "<table " + outerTableText[i];
+//			}
+//			Paragraph outerTextParagraph = null;
+//			String caption = "";
 			height = 0;
 			height = (getTopBorder() == null ? 0 : getTopBorder().getWidth()) + getTopPadding();
-			for (String element : outerTableText) {
-				if (element.contains("</table")) {
-					String[] chunks = element.split("</table>");
-					for (String chunkie : chunks) {
-						if (chunkie.contains("<table")) {
+//			for (String element : outerTableText) {
+//				if (element.contains("</table")) {
+//					String[] chunks = element.split("</table>");
+//					for (String chunkie : chunks) {
+//						if (chunkie.contains("<table")) {
 							// table title
-							Document document = Jsoup.parse(chunkie);
-							Element captionTag = document.select("caption").first();
-							Paragraph tableTitle = null;
-							if (captionTag != null) {
-								caption = captionTag.text();
-								tableTitle = new Paragraph(caption, getFontBold(), tableTitleFontSize, tableWidth,
-										HorizontalAlignment.CENTER, null);
-								yStart = tableTitle.write(tableCellContentStream, xStart, yStart)
-										- marginBetweenElementsY;
-							}
-							height += (captionTag != null ? tableTitle.getHeight() + marginBetweenElementsY : 0);
+							Document document = Jsoup.parse(tableData);
+//							Element captionTag = document.select("caption").first();
+//							Paragraph tableTitle = null;
+//							if (captionTag != null) {
+//								caption = captionTag.text();
+//								tableTitle = new Paragraph(caption, getFontBold(), tableTitleFontSize, tableWidth,
+//										HorizontalAlignment.CENTER, null);
+//								yStart = tableTitle.write(tableCellContentStream, xStart, yStart)
+//										- marginBetweenElementsY;
+//							}
+//							height += (captionTag != null ? tableTitle.getHeight() + marginBetweenElementsY : 0);
 							createInnerTable(tableWidth, document, page, true);
-						} else {
-							// make paragraph and get tokens
-							outerTextParagraph = new Paragraph(chunkie, getFont(), 8, (int) tableWidth);
-							outerTextParagraph.getLines();
-							height += (outerTextParagraph != null
-									? outerTextParagraph.getHeight() + marginBetweenElementsY : 0);
-							yStart = writeOrCalculateParagraph(outerTextParagraph, false);
-						}
-					}
-				} else {
-					// make paragraph and get tokens
-					outerTextParagraph = new Paragraph(element, getFont(), 8, (int) tableWidth);
-					outerTextParagraph.getLines();
-					height += (outerTextParagraph != null ? outerTextParagraph.getHeight() + marginBetweenElementsY
-							: 0);
-					yStart = writeOrCalculateParagraph(outerTextParagraph, false);
-				}
-			}
+//						} else {
+//							// make paragraph and get tokens
+//							outerTextParagraph = new Paragraph(chunkie, getFont(), 8, (int) tableWidth);
+//							outerTextParagraph.getLines();
+//							height += (outerTextParagraph != null
+//									? outerTextParagraph.getHeight() + marginBetweenElementsY : 0);
+//							yStart = writeOrCalculateParagraph(outerTextParagraph, false);
+//						}
+//					}
+//				} else {
+//					// make paragraph and get tokens
+//					outerTextParagraph = new Paragraph(element, getFont(), 8, (int) tableWidth);
+//					outerTextParagraph.getLines();
+//					height += (outerTextParagraph != null ? outerTextParagraph.getHeight() + marginBetweenElementsY
+//							: 0);
+//					yStart = writeOrCalculateParagraph(outerTextParagraph, false);
+//				}
+//			}
 			tableCellContentStream.close();
 		} catch (IOException e) {
 			logger.warn("Cannot draw table for TableCell! Table data: '{}'" + tableData + e);
