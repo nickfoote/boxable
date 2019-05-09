@@ -147,8 +147,8 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 		document.outputSettings().prettyPrint(false);
 		Element htmlTable = document.select("table").first();
 
-		Elements rows = htmlTable.select("tr");
-		for (Element htmlTableRow : rows) {
+		Element htmlTableRow = htmlTable.select("tr").first();
+		do {
 			Row<PDPage> row = table.createRow(0);
 			Elements tableCols = htmlTableRow.select("td");
 			Elements tableHeaderCols = htmlTableRow.select("th");
@@ -183,7 +183,8 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 				}
 			}
 			yStart -= row.getHeight();
-		}
+			htmlTableRow = htmlTable.nextElementSibling();
+		} while (htmlTableRow != null);
 		if (drawTable) {
 			table.draw();
 		}
