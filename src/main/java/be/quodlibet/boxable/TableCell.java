@@ -142,8 +142,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 
 	private void createInnerTable(float tableWidth, Document document, PDPage currentPage, boolean drawTable) throws IOException {
 
-		BaseTable table = new BaseTable(yStart, PDRectangle.A4.getHeight() - pageTopMargin, pageTopMargin,
-				pageBottomMargin, tableWidth, xStart, doc, currentPage, true, true);
+		BaseTable table = new BaseTable(yStart, PDRectangle.A4.getHeight() - pageTopMargin, pageTopMargin, pageBottomMargin, tableWidth, xStart, doc, currentPage, true, true);
 		document.outputSettings().prettyPrint(false);
 		Element htmlTable = document.select("table").first();
 
@@ -157,10 +156,9 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 
 			do {
 				if(htmlTableCol.html().startsWith("<table>")) {
-					Cell<T> cell = (Cell<T>) row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, columnsSize, tableWidth, columnsSize);
+					Cell<T> cell = (Cell<T>) row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0);
 				} else {
-					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100,
-							htmlTableCol.html().replace("&amp;", "&"));
+					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"));
 				}
 				htmlTableCol = htmlTableCol.nextElementSibling();
 			} while(htmlTableCol != null);
