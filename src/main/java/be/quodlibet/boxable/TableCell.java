@@ -143,7 +143,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 
 	private void createInnerTable(float tableWidth, Document document, PDPage currentPage, boolean drawTable) throws IOException {
 
-		BaseTable table = new BaseTable(yStart, PDRectangle.A4.getHeight() - pageTopMargin, pageTopMargin, pageBottomMargin, tableWidth, xStart, doc, currentPage, true, true);
+		BaseTable table = new BaseTable(yStart, 606, pageTopMargin, pageBottomMargin, tableWidth, xStart, doc, currentPage, true, true);
 		document.outputSettings().prettyPrint(false);
 		Element htmlTable = document.select("table").first();
 
