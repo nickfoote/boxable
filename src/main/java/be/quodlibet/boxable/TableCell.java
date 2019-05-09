@@ -158,6 +158,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 			do {
 				if(htmlTableCol.html().startsWith("<table>")) {
 					Cell<T> cell = (Cell<T>) row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0);
+					height += cell.getCellHeight() + marginBetweenElementsY;
 				} else {
 					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"));
 				}
