@@ -165,7 +165,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 				htmlTableCol = htmlTableCol.nextElementSibling();
 			} while(htmlTableCol != null);
 			yStart -= row.getHeight();
-			htmlTableRow = htmlTable.nextElementSibling();
+			htmlTableRow = htmlTableRow.nextElementSibling();
 		} while (htmlTableRow != null);
 		if (drawTable) {
 			table.draw();
