@@ -150,38 +150,20 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 		Element htmlTableRow = htmlTable.select("tr").first();
 		do {
 			Row<PDPage> row = table.createRow(0);
-			Elements tableCols = htmlTableRow.select("td");
-			Elements tableHeaderCols = htmlTableRow.select("th");
-			// do we have header columns?
-			boolean tableHasHeaderColumns = tableHeaderCols.isEmpty() ? false : true;
-			if (tableHasHeaderColumns) {
-				// if entire row is not header row then use bold instead
-				// header cell (<th>)
-				row.setHeaderRow(true);
-			}
-			int columnsSize = tableHasHeaderColumns ? tableHeaderCols.size() : tableCols.size();
-			// calculate how much really columns do you have (including
-			// colspans!)
-			for (Element col : tableHasHeaderColumns ? tableHeaderCols : tableCols) {
-				if (col.attr("colspan") != null && !col.attr("colspan").isEmpty()) {
-					columnsSize += Integer.parseInt(col.attr("colspan")) - 1;
-				}
-			}
-			for (Element col : tableHasHeaderColumns ? tableHeaderCols : tableCols) {
-				if (col.attr("colspan") != null && !col.attr("colspan").isEmpty()) {
-					Cell<T> cell = (Cell<T>) row.createCell(
-							tableWidth / columnsSize * Integer.parseInt(col.attr("colspan")) / row.getWidth() * 100,
-							col.html().replace("&amp;", "&"));
+			Element htmlTableCol = htmlTableRow.select("td").first();
+			Elements tableCols = htmlTableCol.siblingElements();
+			
+			int columnsSize = tableCols.size() + 1;
+
+			do {
+				if(htmlTableCol.html().startsWith("<table>")) {
+					Cell<T> cell = (Cell<T>) row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, columnsSize, tableWidth, columnsSize);
 				} else {
-					if(col.html().startsWith("<table>")) {
-						Cell<T> cell = (Cell<T>) row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, col.html().replace("&amp;", "&"), doc, currentPage, columnsSize, tableWidth, columnsSize);
-					} else {
-						Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100,
-								col.html().replace("&amp;", "&"));
-					}
-					
+					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100,
+							htmlTableCol.html().replace("&amp;", "&"));
 				}
-			}
+				htmlTableCol = htmlTableCol.nextElementSibling();
+			} while(htmlTableCol != null);
 			yStart -= row.getHeight();
 			htmlTableRow = htmlTable.nextElementSibling();
 		} while (htmlTableRow != null);
