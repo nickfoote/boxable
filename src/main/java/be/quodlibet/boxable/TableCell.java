@@ -67,6 +67,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 		this.pageBottomMargin = pageBottomMargin;
 		this.align = align;
 		this.valign = valign;
+		this.marginBetweenElementsY = getBottomPadding();
 		fillTable();
 	}
 
