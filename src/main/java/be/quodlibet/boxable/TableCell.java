@@ -154,15 +154,18 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 			Elements tableCols = htmlTableCol.siblingElements();
 			
 			int columnsSize = tableCols.size() + 1;
+			int column = 1;
 
-			do {
+			while(htmlTableCol != null) {
+				float width = column == 1 ? 25 : 75;
 				if(htmlTableCol.html().startsWith("<table>")) {
-					row.createTableCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0);
+					row.createTableCell(width, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0);
 				} else {
-					row.createCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"));
+					row.createCell(width, htmlTableCol.html().replace("&amp;", "&"));
 				}
 				htmlTableCol = htmlTableCol.nextElementSibling();
-			} while(htmlTableCol != null);
+				column++;
+			};
 			yStart -= row.getHeight();
 			htmlTableRow = htmlTableRow.nextElementSibling();
 		} while (htmlTableRow != null);
