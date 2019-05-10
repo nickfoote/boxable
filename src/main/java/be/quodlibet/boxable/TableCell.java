@@ -157,7 +157,18 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 			int column = 1;
 
 			while(htmlTableCol != null) {
-				float width = column == 1 ? 25 : 75;
+				float width = 100;
+				switch(columnsSize) {
+					case 1:
+						width = 100;
+						break;
+					case 2:
+						width = column == 1 ? 25 : 75;
+						break;
+					default:
+						width = tableWidth / columnsSize / row.getWidth() * 100;
+					
+				}
 				if(htmlTableCol.html().startsWith("<table>")) {
 					row.createTableCell(width, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0);
 				} else {
