@@ -13,6 +13,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
 import be.quodlibet.boxable.image.Image;
+import be.quodlibet.boxable.page.PageProvider;
 
 public class Row<T extends PDPage> {
 
@@ -106,9 +107,9 @@ public class Row<T extends PDPage> {
 	 * @return {@link TableCell} with provided width and table data
 	 */
 	public TableCell<T> createTableCell(float width, String tableData, PDDocument doc, PDPage page, float yStart,
-			float pageTopMargin, float pageBottomMargin) {
+			float pageTopMargin, float pageBottomMargin, PageProvider<PDPage> pageProvider) {
 		TableCell<T> cell = new TableCell<T>(this, width, tableData, true, doc, page, yStart, pageTopMargin,
-				pageBottomMargin);
+				pageBottomMargin, pageProvider);
 		setBorders(cell, cells.isEmpty());
 		cells.add(cell);
 		return cell;
