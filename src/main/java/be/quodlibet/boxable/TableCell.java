@@ -161,6 +161,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 					height += cell.getCellHeight() + marginBetweenElementsY;
 				} else {
 					Cell<T> cell = (Cell<T>) row.createCell(tableWidth / columnsSize / row.getWidth() * 100, htmlTableCol.html().replace("&amp;", "&"));
+					height += cell.getCellHeight() + marginBetweenElementsY;
 				}
 				htmlTableCol = htmlTableCol.nextElementSibling();
 			} while(htmlTableCol != null);
