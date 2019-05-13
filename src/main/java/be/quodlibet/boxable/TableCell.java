@@ -18,7 +18,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.quodlibet.boxable.page.PageProvider;
 import be.quodlibet.boxable.text.Token;
 import be.quodlibet.boxable.utils.FontUtils;
 import be.quodlibet.boxable.utils.PDStreamUtils;
@@ -27,14 +26,13 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 
 	private final static Logger logger = LoggerFactory.getLogger(TableCell.class);
 
-	private final PageProvider<PDPage> pageProvider;
 	private final String tableData;
 	private final float width;
 	private float yStart;
 	private float xStart;
 	private float height = 0;
 	private final PDDocument doc;
-	private PDPage page;
+	private final PDPage page;
 	private float marginBetweenElementsY = FontUtils.getHeight(getFont(), getFontSize());
 	private final HorizontalAlignment align;
 	private final VerticalAlignment valign;
@@ -51,16 +49,15 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 	private int tableTitleFontSize = 8;
 
 	TableCell(Row<T> row, float width, String tableData, boolean isCalculated, PDDocument document, PDPage page,
-			float yStart, float pageTopMargin, float pageBottomMargin, PageProvider<PDPage> pageProvider) {
+			float yStart, float pageTopMargin, float pageBottomMargin) {
 		this(row, width, tableData, isCalculated, document, page, yStart, pageTopMargin, pageBottomMargin,
-				HorizontalAlignment.LEFT, VerticalAlignment.TOP, pageProvider);
+				HorizontalAlignment.LEFT, VerticalAlignment.TOP);
 	}
 
 	TableCell(Row<T> row, float width, String tableData, boolean isCalculated, PDDocument document, PDPage page,
 			float yStart, float pageTopMargin, float pageBottomMargin, final HorizontalAlignment align,
-			final VerticalAlignment valign, PageProvider<PDPage> pageProvider) {
+			final VerticalAlignment valign) {
 		super(row, width, tableData, isCalculated);
-		this.pageProvider = pageProvider;
 		this.tableData = tableData;
 		this.width = width * row.getWidth() / 100;
 		this.doc = document;
@@ -173,7 +170,7 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 					
 				}
 				if(htmlTableCol.html().startsWith("<table>")) {
-					row.createTableCell(width, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0, pageProvider);
+					row.createTableCell(width, htmlTableCol.html().replace("&amp;", "&"), doc, currentPage, 0, 0, 0);
 				} else {
 					row.createCell(width, htmlTableCol.html().replace("&amp;", "&"));
 				}
@@ -181,15 +178,6 @@ public class TableCell<T extends PDPage> extends Cell<T> {
 				column++;
 			};
 			yStart -= row.getHeight();
-			
-			if(yStart <= pageBottomMargin) {
-
-				tableCellContentStream.close();
-				this.yStart = 500 - pageTopMargin;
-				page = pageProvider.nextPage();
-				this.tableCellContentStream = new PDPageContentStream(doc, page, true, true);
-			}
-			
 			htmlTableRow = htmlTableRow.nextElementSibling();
 		} while (htmlTableRow != null);
 		if (drawTable) {
